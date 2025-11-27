@@ -4,11 +4,6 @@ pipeline {
         maven 'Maven-3.9'
     }
 
-    environment {
-        DOCKER_IMAGE = 'docker-repo/springboot-backend'
-        DOCKER_TAG   = "${env.BUILD_NUMBER}"
-    }
-
     stages {
 
         stage('Checkout') {
@@ -38,21 +33,12 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    sh """
-                        docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
-                        docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest
-                    """
-                }
-            }
-        }
+    
     }
 
     post {
         success {
-            echo "Build completed successfully - Image: ${DOCKER_IMAGE}:${DOCKER_TAG}"
+            echo "Build completed successfully"
         }
         failure {
             echo 'Build failed. Please check the logs.'
