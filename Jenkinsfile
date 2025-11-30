@@ -33,6 +33,12 @@ pipeline {
             }
         }
 
+        stage('List workspace files') {
+            steps {
+                sh 'ls -la'
+            }
+        }
+
         stage('Build docker image') {
             steps {
                 sh 'docker build -t ilyeschrif21/docker-repo:$BUILD_NUMBER .'
@@ -41,7 +47,9 @@ pipeline {
 
         stage('Login to DockerHub') {
             steps {
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_CREDENTIALS_USR', passwordVariable: 'DOCKERHUB_CREDENTIALS_PSW')]) {
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                }
             }
         }
 
