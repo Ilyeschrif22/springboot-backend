@@ -2,6 +2,7 @@ pipeline {
     agent any
     tools {
         maven 'Maven-3.9'
+        jdk 'Java17'
     }
 
     stages {
@@ -33,7 +34,25 @@ pipeline {
             }
         }
 
-    
+        stage('Build docker image') {
+            steps {
+                sh 'docker build -t ilyeschrif21/docker-repo:$BUILD_NUMBER .'
+            }
+        }
+
+        stage('Login to DockerHub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_CREDENTIALS_USR', passwordVariable: 'DOCKERHUB_CREDENTIALS_PSW')]) {
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                }
+            }
+        }
+
+        stage('Push image') {
+            steps {
+                sh 'docker push ilyeschrif21/docker-repo:$BUILD_NUMBER'
+            }
+        }
     }
 
     post {
