@@ -5,29 +5,9 @@ pipeline {
     }
 
     stages {
-        
-        // ================================================================
-        // >> TEMPORARY STAGE TO FIX CORRUPTION <<
-        // RUN THIS ONCE, THEN DELETE THIS ENTIRE STAGE.
-        // ================================================================
-        stage('Fix Git Corruption') {
-            steps {
-                // Ensure this machine has the 'find' utility (common on Linux/Git Bash)
-                
-                // 1. Find and delete zero-byte files (the common cause of the corruption error)
-                echo 'Attempting to find and remove zero-byte corrupted Git objects...'
-                sh 'find .git/objects/ -size 0 -exec rm -f {} \\;' 
-                
-                // 2. Force Git to redownload the missing objects from the remote repository
-                echo 'Forcing a Git fetch to redownload missing objects...'
-                sh 'git fetch origin' 
-            }
-        }
-        // ================================================================
 
         stage('Checkout') {
             steps {
-                // This 'git' step will now run a clean checkout/fetch
                 git(
                     branch: 'main',
                     url: 'https://github.com/Ilyeschrif22/springboot-backend.git'
