@@ -14,6 +14,19 @@ pipeline {
                 )
             }
         }
+ 
+        stage('SonarQube Analysis') {
+            steps {
+                sh '''
+                    mvn sonar:sonar \
+                    -Dsonar.projectKey=springboot-backend \
+                    -Dsonar.projectName=springboot-backend \
+                    -Dsonar.host.url=http://192.168.33.10:9000 \
+                    -Dsonar.login=squ_b7fb82287b627e8d336aec348a2bcf5b74e9e6fb
+                '''
+            }
+        }
+
 
         stage('Build') {
             steps {
@@ -60,6 +73,7 @@ pipeline {
             }
         }
     }
+
 
     post {
         success {
