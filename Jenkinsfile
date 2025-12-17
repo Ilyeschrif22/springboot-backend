@@ -22,7 +22,7 @@ pipeline {
                     -Dsonar.projectKey=springboot-backend \
                     -Dsonar.projectName=springboot-backend \
                     -Dsonar.host.url=http://192.168.33.10:9000 \
-                    -Dsonar.login=squ_1c4e3c37d60899ea798e531120fe7a5d196662df
+                    -Dsonar.login=squ_9d8a821e1bab95938ef51065c69af98906b47877
                 '''
             }
         }
